@@ -1,6 +1,10 @@
 import streamDeck from "@elgato/streamdeck";
 import { action, KeyDownEvent, KeyUpEvent, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
 
+type Settings = {
+	ipAddress: string;
+};
+
 @action({ UUID: "com.funky.rokuremotejs.option" })
 export class Option extends SingletonAction {
 
@@ -12,9 +16,10 @@ export class Option extends SingletonAction {
         try{
             // Retrieve global settings
             const globalSettings = await streamDeck.settings.getGlobalSettings();
-            
+            const actionIpAddress = ev.payload.settings.ipAddress;
+			
             // Assign global IP address (default to "0.0.0.0" if undefined)
-            let ipAddress = globalSettings?.ipAddress ?? "";
+            let ipAddress = actionIpAddress ?? "";
 
             if (!ipAddress || ipAddress == "") {
                 ev.action.showAlert();

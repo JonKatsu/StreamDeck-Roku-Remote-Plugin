@@ -4,6 +4,7 @@ import { parseStringPromise } from "xml2js";
 
 type Settings = {
 	powerState: string;
+	ipAddress: string;
 };
 
 @action({ UUID: "com.funky.rokuremotejs.power" })
@@ -13,7 +14,7 @@ export class Power extends SingletonAction {
         try {
             // Retrieve global settings and get the Roku device IP address
             const globalSettings = await streamDeck.settings.getGlobalSettings();
-            const ipAddress = globalSettings?.ipAddress ?? "0.0.0.0";
+            const ipAddress = ev.payload.settings.ipAddress ?? "0.0.0.0";
 
             // Fetch device info XML from the Roku device
             const url = `http://${ipAddress}:8060/query/device-info`;
@@ -56,7 +57,7 @@ export class Power extends SingletonAction {
             const globalSettings = await streamDeck.settings.getGlobalSettings();
             
             // Assign global IP address (default to "0.0.0.0" if undefined)
-            let ipAddress = globalSettings?.ipAddress ?? "";
+            let ipAddress = ev.payload.settings.ipAddress ?? "";
 
             const powerState = ev.payload.settings.powerState = ev.payload.settings.powerState ?? "";
 

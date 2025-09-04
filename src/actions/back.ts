@@ -1,6 +1,10 @@
 import streamDeck from "@elgato/streamdeck";
 import { action, KeyDownEvent, KeyUpEvent, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
 
+type Settings = {
+	ipAddress: string;
+};
+
 @action({ UUID: "com.funky.rokuremotejs.back" })
 export class Back extends SingletonAction {
 
@@ -15,7 +19,7 @@ export class Back extends SingletonAction {
             const globalSettings = await streamDeck.settings.getGlobalSettings();
             
             // Assign global IP address (default to "0.0.0.0" if undefined)
-            let ipAddress = globalSettings?.ipAddress ?? "";
+            let ipAddress = ev.payload.settings.ipAddress ?? "";
 
             // Construct the request URL
             const url = `http://${ipAddress}:8060/keypress/back`;

@@ -2,11 +2,13 @@ import streamDeck, { DidReceiveSettingsEvent, JsonObject } from "@elgato/streamd
 import { action, KeyDownEvent, KeyUpEvent, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
 import { parseStringPromise } from "xml2js";
 
-
 // Define the action's settings type.
 // type Settings = {
 // 	powerState: string;
 // };
+type Settings = {
+	ipAddress: string;
+};
 
 @action({ UUID: "com.funky.rokuremotejs.power-on" })
 export class PowerOn extends SingletonAction {
@@ -21,7 +23,7 @@ export class PowerOn extends SingletonAction {
             const globalSettings = await streamDeck.settings.getGlobalSettings();
             
             // Assign global IP address (default to "0.0.0.0" if undefined)
-            let ipAddress = globalSettings?.ipAddress ?? "";
+            let ipAddress = ev.payload.settings.ipAddress ?? "";
 
             if (!ipAddress || ipAddress == "") {
                 ev.action.showAlert();

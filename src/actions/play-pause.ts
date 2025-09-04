@@ -1,6 +1,10 @@
 import streamDeck from "@elgato/streamdeck";
 import { action, KeyDownEvent, KeyUpEvent, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
 
+type Settings = {
+	ipAddress: string;
+};
+
 @action({ UUID: "com.funky.rokuremotejs.play-pause" })
 export class PlayPause extends SingletonAction {
 
@@ -10,11 +14,11 @@ export class PlayPause extends SingletonAction {
 
     override async onKeyUp(ev: KeyUpEvent): Promise<void> {
         try{
-            // Retrieve global settings
-            const globalSettings = await streamDeck.settings.getGlobalSettings();
+            // Retrieve global settings		
+            const actionIpAddress = ev.payload.settings.ipAddress;
             
             // Assign global IP address (default to "0.0.0.0" if undefined)
-            let ipAddress = globalSettings?.ipAddress ?? "";
+            let ipAddress = ev.payload.settings.ipAddress ?? "";
 
             if (!ipAddress || ipAddress == "") {
                 ev.action.showAlert();

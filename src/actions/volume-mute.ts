@@ -1,6 +1,10 @@
 import streamDeck from "@elgato/streamdeck";
 import { action, KeyDownEvent, KeyUpEvent, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
 
+type Settings = {
+	ipAddress: string;
+};
+
 @action({ UUID: "com.funky.rokuremotejs.volume-mute" })
 export class VolumeMute extends SingletonAction {
 
@@ -14,7 +18,7 @@ export class VolumeMute extends SingletonAction {
             const globalSettings = await streamDeck.settings.getGlobalSettings();
             
             // Assign global IP address (default to "0.0.0.0" if undefined)
-            let ipAddress = globalSettings?.ipAddress ?? "";
+            let ipAddress = ev.payload.settings.ipAddress ?? "";
 
             if (!ipAddress || ipAddress == "") {
                 ev.action.showAlert();
